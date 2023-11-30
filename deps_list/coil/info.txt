@@ -1,0 +1,6 @@
+
+dependencies {
+	"io.coil-kt:coil-compose:2.3.0"
+}
+retrieveUrl : ""
+# some more scripts to do shit / extras

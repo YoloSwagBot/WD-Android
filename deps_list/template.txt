@@ -1,0 +1,20 @@
+
+dependencies {
+	implementation {  }
+	ksp {  }
+}
+retrieveUrl : ""
+extras {
+	projectLevelGradleDotBuild {
+		plugin {
+			
+		}
+	}
+	appLevelGradleDotBuild {
+		plugin { 
+			
+		}
+	}
+}
+# some more scripts to do shit / extras
+

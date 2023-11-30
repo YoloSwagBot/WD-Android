@@ -1,0 +1,26 @@
+
+dependencies {
+	implementation { "com.google.dagger:hilt-android:2.48.1" }
+	ksp { "com.google.dagger:hilt-android-compiler:2.48.1" }
+}
+retrieveUrl : ""
+extras {
+	projectLevelGradleDotBuild {
+		plugin {
+			"id(\"com.google.dagger.hilt.android\") version \"2.48.1\" apply false"
+		}
+	}
+	appLevelGradleDotBuild {
+		plugin { 
+			"com.google.dagger.hilt.android"
+		}
+		testOptions {
+			"unitTests.isIncludeAndroidResources = true"
+		}
+	}
+}
+# some more scripts to do shit / extras
+
+# implementation("com.google.dagger:hilt-android:2.48.1")
+# testImplementation("com.google.dagger:hilt-android:2.48.1")
+# androidTestImplementation("com.google.dagger:hilt-android:2.48.1")
