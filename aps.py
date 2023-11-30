@@ -1,3 +1,6 @@
+# Carson Bath
+# [ https://github.com/yoloswagbot ]
+
 # script to streamline setup for a new Android project
 # "CLEAN" Architecture
 # (1) Creates common directeories
@@ -145,3 +148,12 @@ packageName = codeDir.split('java/')[-1].replace('/', '.')
 
 
 
+
+
+
+
+
+
+
+# Carson Bath
+# [ https://github.com/yoloswagbot ]
