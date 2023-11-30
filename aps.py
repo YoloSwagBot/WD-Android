@@ -7,14 +7,11 @@
 import sys
 import os
 
-# find root code_directory of newly created project, assuming a default "xyzActivity.kt" file was created.
-def find_activity_directory(root_path):
-    for dirpath, dirnames, filenames in os.walk(root_path):
-        for filename in filenames:
-            if filename.endswith("Activity.kt"):
-                return dirpath
 
 
+# ========================================================================
+#============= First Script Question, file/dir variable ==================
+# ========================================================================
 
 # "Are you in the root directory of the new Android Project? (Yes/y, No/n)"
 # No/no/N/n -> stop script
@@ -22,17 +19,14 @@ def find_activity_directory(root_path):
 #				 (2) looks for app folder
 #				 (3) look for "app/src/main/java/.../.../projectName_lowercase"
 while True:
-    user_input = input("Are you in the root directory of a newly created Android Project? (Yes/No): ").strip().lower()
-    if user_input in ['yes', 'y']:
-        break
-    elif user_input in ['no', 'n']:
-        sys.exit()
-    else:
-        print("Invalid input. (Yes/y - No/n)")
-
-
-
-
+	user_input = input("Are you in the root directory of a newly created Android Project? (Yes/No): ").strip().lower()
+	if user_input in ['yes', 'y']:
+		break
+	elif user_input in ['no', 'n']:
+		print("Go to the root directory of a brand new Android project.")
+		sys.exit()
+	else:
+		print("Invalid input. (Yes/y - No/n)")
 
 
 hasUserAnsweredFirstQuestion = False
@@ -55,6 +49,13 @@ else:
 	appLevelGradleFile = None
 
 # (3) root code_directory
+# find root code_directory of newly created project, assuming a default "xyzActivity.kt" file was created.
+def find_activity_directory(root_path):
+    for dirpath, dirnames, filenames in os.walk(root_path):
+        for filename in filenames:
+            if filename.endswith("Activity.kt"):
+                return dirpath
+
 currDir = os.getcwd()
 src_main_java_path = os.path.join(currDir, "app", "src", "main", "java")
 codeDir = find_activity_directory(src_main_java_path)
@@ -76,19 +77,60 @@ if (codeDir is None):
 	print("Initial code directory not found. fix script. exiting")
 	sys.exit()
 # else:
-#     print("xyzActivity.kt' files found.")
+#     print(f"codeDir is : {codeDir}")
 
 
 # ========================================================================
-#===================== All 3 Files/Directories Found =====================
+#============= Setup CLEAN architecture, ask Feature name ================
 # ========================================================================
 
+packageName = codeDir.split('java/')[-1].replace('/', '.')
+# print(f"packageName is: {packageName}")
 
 # "Setting up "CLEAN" architecture.""
 # "What is the name of the initial feature?"
 # while (!hasUserAnsweredSecondQuestion)
-	
 
+# while True:
+#     user_input = input("Setting up \"CLEAN\" architecture, name of intial Feature? (ie: GithubUsers, UserData)").strip()
+#     if user_input in ['yes', 'y']:
+#         break
+#     elif user_input in ['no', 'n']:
+#         sys.exit()
+#     else:
+#         print("Invalid input. (Yes/y - No/n)")
+
+
+# featureName = "Feature"
+
+# clean_struct = {
+# 	codeDir : {
+# 		"data"  {
+
+# 		}
+# 		"domain"  {
+# 			"interfaces" : {}
+# 			"models" : {}
+# 			"usecases" : {}
+# 		}
+# 		"ui"  {
+# 			featureName.lower() : {
+# 				"screens" : {
+
+# 				}
+# 				"viewmodels" : {
+
+# 				}
+# 			}
+# 		}
+# 		"util" : {
+# 			"Constants.kt" : ''
+# 		}
+# 		"di" : {
+
+# 		}
+# 	}
+# }
 
 # "Would you like to add common project modules(ie: network, analytics, logger, etc)?"
 # while (!hasUserAnsweredThirdQuestions)
