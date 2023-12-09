@@ -32,11 +32,6 @@ while True:
 		print("Invalid input. (Yes/y - No/n)")
 
 
-hasUserAnsweredFirstQuestion = False
-hasUserAnsweredSecondQuestion = False
-hasUserAnsweredThirdQuestions = False
-
-
 # (1) top level build.gradle.kts
 topLevelGradleFile = None # "/build.gradle.kts"
 if (os.path.isfile("build.gradle.kts")):
@@ -134,6 +129,8 @@ packageName = codeDir.split('java/')[-1].replace('/', '.')
 # 		}
 # 	}
 # }
+
+# TODO - EDIT THE MANIFEST FILE
 
 # "Would you like to add common project modules(ie: network, analytics, logger, etc)?"
 # while (!hasUserAnsweredThirdQuestions)

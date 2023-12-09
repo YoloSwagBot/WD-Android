@@ -1,6 +1,6 @@
 
 dependencies {
-	"com.google.accompanist:accompanist-permissions:0.33.2-beta"
+	"com.google.accompanist:accompanist-permissions:0.32.0"
 }
 retrieveUrl : ""
 # some more scripts to do shit / extras
