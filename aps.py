@@ -9,11 +9,11 @@
 
 import sys
 import os
-
+import shutil #moving files/dirs
 
 
 # ========================================================================
-#============= First Script Question, file/dir variable ==================
+# ============= First Script Question, file/dir variable =================
 # ========================================================================
 
 # "Are you in the root directory of the new Android Project? (Yes/y, No/n)"
@@ -79,23 +79,32 @@ if (codeDir is None):
 
 
 # ========================================================================
-#============= Setup CLEAN architecture, ask Feature name ================
+# ======= Ask Application file name, ie: MyApp, MyApplication ============
 # ========================================================================
 
-packageName = codeDir.split('java/')[-1].replace('/', '.')
-print(f"packageName is: {packageName}")
+while True:
+	applicationFileName = input("Name of Application file to create(ie: MyApp, MyApplication)?  ").strip()
+	confirmAppName = input(f"Confirm app file name:  '{applicationFileName}'  (yes/no): ").lower()
+	if (confirmAppName) in ['yes', 'y']:
+		break
+	else:
+		print("Invalid input. (Yes/y - No/n)")
 
+# ========================================================================
+# ======================== initial Feature name ==========================
+# ========================================================================
 
 while True:
 	feature_input = input("Setting up \"CLEAN\" architecture, name of intial Feature? (ie: GithubUsers, UserData, etc):  ").strip()
 	confirmation = input(f"Confirm feature name:  '{feature_input}'  (yes/no): ").lower()
 	if (confirmation) in ['yes', 'y']:
 		break
-	elif (confirmation) in ['no', 'n']:
-		print("Enter the feature name you want.")
 	else:
 		print("Invalid input. (Yes/y - No/n)")
 
+# ========================================================================
+# ========================== Create Directories ==========================
+# ========================================================================
 
 def create_folders_and_files(folder_structure, base_path="."):
     for item_name, content in folder_structure.items():
@@ -110,6 +119,9 @@ def create_folders_and_files(folder_structure, base_path="."):
             # If the content is a string, it's a file with the given content
             with open(item_path, 'w') as file:
                 file.write(content)
+
+packageName = codeDir.split('java/')[-1].replace('/', '.')
+# print(f"packageName is: {packageName}")
 
 clean_struct = {
 	codeDir : {
@@ -140,28 +152,65 @@ clean_struct = {
 	}
 }
 
-base_code_dir_path = "app/src/main/java/{packageName}"
+base_code_dir_path = f"app/src/main/java/{packageName}".replace('.', '/')
 
 create_folders_and_files(clean_struct, base_code_dir_path)
 
+# ========================================================================
+# ========== Edit Manifest file, Application/MainActivity ================
+# ========================================================================
 
-# TODO - EDIT THE MANIFEST FILE
+def move_file(source_path, destination_path):
+    try:
+        shutil.move(source_path, destination_path)
+        print(f"File moved from {source_path} to {destination_path}")
+    except FileNotFoundError:
+        print(f"Error: File not found at {source_path}")
+    except Exception as e:
+        print(f"Error: {e}")
 
-# "Would you like to add common project modules(ie: network, analytics, logger, etc)?"
-# while (!hasUserAnsweredThirdQuestions)
+# Activity
+# (1) Move MainActivity.kt to ui/MainActivity.kt
+# (2) Change manifest ".MainActivity" to "ui.MainAcitivity"
+activityFileName = "MainActivity.kt"
+pathOfActivityFile = os.path.join(base_code_dir_path, activityFileName)
+newActivityFilePath = os.path.join(base_code_dir_path, "ui", activityFileName)
+move_file(pathOfActivityFile, newActivityFilePath)
+# (3a) add ".ui" to package at top of file
+# 	(ie: package com.appstr.testsetupproject -> package com.appstr.testsetupproject.ui)
+# Read the content of the file
+with open(newActivityFilePath, 'r') as file:
+    lines = file.readlines()
+# (3b) Modify the first line by adding ".ui" to the end
+if lines:
+    lines[0] = lines[0].rstrip('\n') + ".ui\n"
+# (3c) Write the modified content back to the file
+with open(newActivityFilePath, 'w') as file:
+    file.writelines(lines)
 
 
+# Application
+# (1) Create the Application file by name
+applicationFile = f"package {packageName}\n\nimport android.app.Application\n\nclass {applicationFileName}: Application() {{\n\n}}\n\n"
+applicationFilePath = os.path.join(base_code_dir_path, f"{applicationFileName}.kt")
+with open(applicationFilePath, 'w') as file:
+    file.write(applicationFile)
 
-
-
-
-
-# "Good to go!"
-
-
-
-
-
+# (2a) Add the "android:name=\".applicationFileName\"" to <application, new line
+# Read the content of the file
+manfiestFilePath = f"app/src/main/AndroidManifest.xml"
+with open(manfiestFilePath, 'r') as file:
+    lines = file.readlines()
+# (2b) Find the line with the search string and insert a new line after it
+for i, line in enumerate(lines):
+    if "<application" in line:
+        lines.insert(i + 1, f"\t\tandroid:name=\".{applicationFileName}\"\n")
+    # (2c) Replace .MainActivity with .ui.MainActivity
+    elif (".MainActivity") in line:
+        lines[i] = line.replace(".MainActivity", ".ui.MainActivity")
+# (2d) Write the modified content back to the file
+with open(manfiestFilePath, 'w') as file:
+    file.writelines(lines)
 
 
 
@@ -169,3 +218,4 @@ create_folders_and_files(clean_struct, base_code_dir_path)
 
 # Carson Bath
 # [ https://github.com/yoloswagbot ]
+
