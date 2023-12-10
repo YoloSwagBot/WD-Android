@@ -83,52 +83,67 @@ if (codeDir is None):
 # ========================================================================
 
 packageName = codeDir.split('java/')[-1].replace('/', '.')
-# print(f"packageName is: {packageName}")
-
-# "Setting up "CLEAN" architecture.""
-# "What is the name of the initial feature?"
-# while (!hasUserAnsweredSecondQuestion)
-
-# while True:
-#     user_input = input("Setting up \"CLEAN\" architecture, name of intial Feature? (ie: GithubUsers, UserData)").strip()
-#     if user_input in ['yes', 'y']:
-#         break
-#     elif user_input in ['no', 'n']:
-#         sys.exit()
-#     else:
-#         print("Invalid input. (Yes/y - No/n)")
+print(f"packageName is: {packageName}")
 
 
-# featureName = "Feature"
+while True:
+	feature_input = input("Setting up \"CLEAN\" architecture, name of intial Feature? (ie: GithubUsers, UserData, etc):  ").strip()
+	confirmation = input(f"Confirm feature name:  '{feature_input}'  (yes/no): ").lower()
+	if (confirmation) in ['yes', 'y']:
+		break
+	elif (confirmation) in ['no', 'n']:
+		print("Enter the feature name you want.")
+	else:
+		print("Invalid input. (Yes/y - No/n)")
 
-# clean_struct = {
-# 	codeDir : {
-# 		"data"  {
 
-# 		}
-# 		"domain"  {
-# 			"interfaces" : {}
-# 			"models" : {}
-# 			"usecases" : {}
-# 		}
-# 		"ui"  {
-# 			featureName.lower() : {
-# 				"screens" : {
+def create_folders_and_files(folder_structure, base_path="."):
+    for item_name, content in folder_structure.items():
+        item_path = os.path.join(base_path, item_name)
 
-# 				}
-# 				"viewmodels" : {
+        if isinstance(content, dict):
+            # If the content is a dictionary, it's a subfolder
+            if not os.path.exists(item_path):
+                os.makedirs(item_path)
+            create_folders_and_files(content, item_path)
+        elif isinstance(content, str):
+            # If the content is a string, it's a file with the given content
+            with open(item_path, 'w') as file:
+                file.write(content)
 
-# 				}
-# 			}
-# 		}
-# 		"util" : {
-# 			"Constants.kt" : ''
-# 		}
-# 		"di" : {
+clean_struct = {
+	codeDir : {
+		"data" : {
 
-# 		}
-# 	}
-# }
+		},
+		"domain" : {
+			"interfaces" : {},
+			"models" : {},
+			"usecases" : {}
+		},
+		"ui" : {
+			feature_input.lower() : {
+				"screens" : {
+
+				},
+				"viewmodels" : {
+
+				}
+			}
+		},
+		"util" : {
+			"Constants.kt" : ''
+		},
+		"di" : {
+
+		}
+	}
+}
+
+base_code_dir_path = "app/src/main/java/{packageName}"
+
+create_folders_and_files(clean_struct, base_code_dir_path)
+
 
 # TODO - EDIT THE MANIFEST FILE
 
